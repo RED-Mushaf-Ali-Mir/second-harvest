@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Second Harvest</title>
+  <style>
+    :root {
+      --paper: #f7f5ee;
+      --ink: #243b2d;
+      --muted: #667267;
+      --green: #315b3c;
+      --line: #dedfd3;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: system-ui, sans-serif;
+      line-height: 1.6;
+    }
+    header {
+      max-width: 1120px;
+      margin: auto;
+      padding: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand { font-weight: 800; font-size: 20px; }
+    .brand span { color: #758840; }
+    .status {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+    }
+    main { max-width: 1120px; margin: auto; padding: 48px 24px; }
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 750;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #758840;
+    }
+    h1 {
+      font-family: Georgia, serif;
+      font-size: clamp(40px, 6vw, 68px);
+      font-weight: 400;
+      letter-spacing: -2px;
+      line-height: 1.08;
+      margin: 14px 0 20px;
+      max-width: 760px;
+    }
+    .intro { color: var(--muted); max-width: 640px; }
+    .journey {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 28px 0;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .journey span {
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 7px 13px;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+    .card {
+      background: #fffef9;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 28px;
+    }
+    h2 { margin: 0 0 8px; font-size: 23px; }
+    h3 { font-size: 15px; margin: 22px 0 6px; }
+    .subtext { color: var(--muted); font-size: 14px; margin-top: 0; }
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 650;
+      margin: 18px 0 7px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccd2c5;
+      border-radius: 9px;
+      background: white;
+      color: var(--ink);
+      font: inherit;
+      font-size: 14px;
+    }
+    textarea { min-height: 86px; resize: vertical; }
+    :focus-visible { outline: 3px solid #adbf80; outline-offset: 3px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    button {
+      background: var(--green);
+      color: white;
+      border: 0;
+      border-radius: 10px;
+      padding: 14px 18px;
+      font: inherit;
+      font-weight: 650;
+      cursor: pointer;
+    }
+    #submit { margin-top: 24px; width: 100%; }
+    button:disabled { opacity: .65; cursor: wait; }
+    .secondary {
+      padding: 0;
+      background: transparent;
+      color: var(--green);
+      font-size: 13px;
+      text-decoration: underline;
+    }
+    .empty {
+      border: 1px dashed #bbc6ae;
+      border-radius: 12px;
+      padding: 28px 20px;
+      margin-top: 22px;
+      color: var(--muted);
+    }
+    #error {
+      color: #8b3027;
+      background: #fff0e9;
+      padding: 12px;
+      border-radius: 8px;
+    }
+    #progress, #timing { color: var(--muted); font-size: 13px; }
+    #result p { overflow-wrap: anywhere; white-space: pre-wrap; }
+    li { margin-bottom: 8px; }
+    ul { padding-left: 20px; }
+    footer { margin-top: 30px; color: var(--muted); font-size: 12px; }
+    [hidden] { display: none !important; }
+    @media (max-width: 760px) {
+      main { padding-top: 30px; }
+      .layout, .row { grid-template-columns: 1fr; }
+      .card { padding: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">Second Harvest<span> ✳</span></div>
+    <div id="connection" class="status" role="status">
+      Checking local model…
+    </div>
+  </header>
+
+  <main>
+    <div class="eyebrow">A little curiosity. A new beginning.</div>
+    <h1>Your next garden might<br>start with today’s meal.</h1>
+    <p class="intro">
+      Start with what you ate, what remains, and the space you have.
+      We’re building a way to turn everyday leftovers into thoughtful
+      growing possibilities.
+    </p>
+
+    <div class="journey" aria-label="Planned experience">
+      <span>01 · Discover food benefits</span>
+      <span>02 · Compare growing paths</span>
+      <span>03 · Choose and plant</span>
+    </div>
+
+    <div class="layout">
+      <section class="card">
+        <h2>What’s on your kitchen counter?</h2>
+        <p class="subtext">
+          First, tell us what you have. This prototype prepares your
+          starting summary.
+        </p>
+        <button class="secondary" type="button" id="example">
+          Fill a sample — edit it to match your situation
+        </button>
+
+        <form id="intake">
+          <label for="foods">What fruits or vegetables did you eat?</label>
+          <input id="foods" name="foods" required minlength="2"
+            maxlength="300" placeholder="For example: tomatoes and spring onions">
+
+          <label for="leftovers">What parts are left, and in what condition?</label>
+          <textarea id="leftovers" name="leftovers" required minlength="2"
+            maxlength="500"
+            placeholder="Describe seeds, stems, roots, or other parts. Are they fresh, cooked, or dried?"></textarea>
+
+          <div class="row">
+            <div>
+              <label for="space">Growing space</label>
+              <select id="space" name="space">
+                <option>Balcony</option>
+                <option>Garden</option>
+                <option>Terrace</option>
+                <option>Not sure</option>
+              </select>
+            </div>
+            <div>
+              <label for="sunlight">Direct sunlight per day</label>
+              <select id="sunlight" name="sunlight">
+                <option>Not sure</option>
+                <option>Less than 2 hours</option>
+                <option>2–4 hours</option>
+                <option>4–6 hours</option>
+                <option>More than 6 hours</option>
+              </select>
+            </div>
+          </div>
+
+          <label for="containers">Containers and materials available</label>
+          <textarea id="containers" name="containers" required minlength="2"
+            maxlength="300"
+            placeholder="Include approximate container size, drainage holes, and whether you have potting mix."></textarea>
+
+          <label for="location">City or region <small>(optional)</small></label>
+          <input id="location" name="location" maxlength="100"
+            placeholder="No exact address needed">
+
+          <button type="submit" id="submit">Prepare my starting summary →</button>
+          <p id="progress" role="status" hidden></p>
+          <p id="error" role="alert" hidden></p>
+        </form>
+      </section>
+
+      <section class="card" id="output" aria-busy="false">
+        <div class="eyebrow">Your starting point</div>
+        <h2>A small beginning.</h2>
+
+        <div class="empty" id="empty">
+          Your summary will appear here after the local model reads
+          your details.
+          <p>No planting or nutrition recommendations are generated
+          in this first build.</p>
+        </div>
+
+        <div id="result" hidden>
+          <h3>Food and leftovers</h3>
+          <p id="food-summary"></p>
+
+          <h3>Your growing setup</h3>
+          <p id="setup-summary"></p>
+
+          <h3>Details to clarify</h3>
+          <ul id="questions"></ul>
+          <p class="subtext">
+            If anything is inaccurate or missing, edit the form and
+            generate a new summary.
+          </p>
+          <p id="timing"></p>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      Development preview · Inference runs on this computer ·
+      No external fonts, analytics, or image services
+    </footer>
+  </main>
+
+  <script>
+    const get = id => document.getElementById(id);
+    const form = get("intake");
+    const submit = get("submit");
+
+    async function checkConnection() {
+      try {
+        const response = await fetch("/api/health");
+        if (!response.ok) throw new Error();
+        const data = await response.json();
+        get("connection").textContent = data.message;
+      } catch {
+        get("connection").textContent = "Cannot reach the application server";
+      }
+    }
+
+    get("example").addEventListener("click", () => {
+      get("foods").value = "Tomatoes and spring onions";
+      get("leftovers").value =
+        "Fresh uncooked tomato seeds and spring onion bases with roots.";
+      get("space").value = "Balcony";
+      get("sunlight").value = "4–6 hours";
+      get("containers").value =
+        "A clean 2-litre food container without drainage holes. No potting mix yet.";
+      get("location").value = "Karachi";
+    });
+
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+
+      const payload = Object.fromEntries(new FormData(form).entries());
+      submit.disabled = true;
+      get("example").disabled = true;
+      get("error").hidden = true;
+      get("result").hidden = true;
+      get("empty").hidden = true;
+      get("progress").hidden = false;
+      get("output").setAttribute("aria-busy", "true");
+
+      const started = performance.now();
+      const updateProgress = () => {
+        const seconds = Math.floor((performance.now() - started) / 1000);
+        get("progress").textContent =
+          `Reading your details locally… ${seconds}s. CPU generation may take a little while.`;
+      };
+      updateProgress();
+      const timer = setInterval(updateProgress, 1000);
+
+      try {
+        const response = await fetch("/api/intake", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            typeof data.detail === "string"
+              ? data.detail
+              : "Please check your entries and try again."
+          );
+        }
+
+        get("food-summary").textContent = data.summary.food_summary;
+        get("setup-summary").textContent = data.summary.setup_summary;
+
+        const questions = get("questions");
+        questions.replaceChildren();
+
+        const items = data.summary.missing_details.length
+          ? data.summary.missing_details
+          : ["No additional questions were identified by the model."];
+
+        for (const item of items) {
+          const li = document.createElement("li");
+          li.textContent = item;
+          questions.appendChild(li);
+        }
+
+        get("timing").textContent =
+          `${data.model} · ${data.elapsed_seconds}s · Local CPU`;
+        get("result").hidden = false;
+
+      } catch (error) {
+        get("empty").hidden = false;
+        get("error").textContent =
+          error.message || "Something went wrong. Please try again.";
+        get("error").hidden = false;
+      } finally {
+        clearInterval(timer);
+        get("progress").hidden = true;
+        get("output").setAttribute("aria-busy", "false");
+        submit.disabled = false;
+        get("example").disabled = false;
+        checkConnection();
+      }
+    });
+
+    checkConnection();
+  </script>
+</body>
+</html>
